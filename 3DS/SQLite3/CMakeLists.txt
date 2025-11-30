@@ -7,14 +7,16 @@ message(STATUS "unzipping file")
 execute_process( COMMAND unzip -jo "sqlite3.zip" -d "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
-add_library(sqlite3 sqlite3.c )
+add_library(sqlite3 sqlite3.c sqlite3_stubs.c )
 
-# 3DS: no sys/mman.h, so disable mmap
 target_compile_definitions(sqlite3 PRIVATE
-    # Make that sys/mman.h guard false:
-    SQLITE_OMIT_WAL           # <- this is the key one
-    SQLITE_MAX_MMAP_SIZE=0    # must be numeric 0
+    SQLITE_OMIT_WAL
+    SQLITE_MAX_MMAP_SIZE=0
+    SQLITE_DISABLE_MMAP
     SQLITE_OMIT_LOAD_EXTENSION
-)
+    SQLITE_OMIT_DYNAMIC_EXTENSION
+    SQLITE_THREADSAFE=0
 
-INSTALL(TARGETS sqlite3 LIBRARY DESTINATION lib )
+)
+INSTALL(TARGETS sqlite3 ARCHIVE DESTINATION lib )
+INSTALL(FILES sqlite3.h DESTINATION include)
