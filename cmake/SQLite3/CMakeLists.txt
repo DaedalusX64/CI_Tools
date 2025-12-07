@@ -7,8 +7,8 @@ message(STATUS "unzipping file")
 execute_process( COMMAND unzip -jo "sqlite3.zip" -d "${CMAKE_CURRENT_SOURCE_DIR}")
 
 if(CTR)
-add_library(sqlite3 sqlite3.c sqlite3_stubs.c )
-else
+add_library(sqlite3 sqlite3.c sqlite3_stubs.c)
+else()
 add_library(sqlite3 sqlite3.c)
 endif()
 
