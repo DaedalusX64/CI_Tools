@@ -1,7 +1,5 @@
 FROM devkitpro/toolchain-base
 
-MAINTAINER Dave Murphy <davem@devkitpro.org>
-
 RUN dkp-pacman -Syyu --noconfirm && \
     dkp-pacman -S --needed --noconfirm 3ds-dev && \
     dkp-pacman -S --needed --noconfirm 3ds-portlibs armv4t-portlibs && \
@@ -10,10 +8,11 @@ RUN dkp-pacman -Syyu --noconfirm && \
 ENV DEVKITARM=${DEVKITPRO}/devkitARM
 
 # Setup GLM
-RUN git clone https://github.com/g-truc/glm
- cd glm && \
- cmake "-DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/3DS.cmake" . && \
- make; make install
+RUN git clone https://github.com/g-truc/glm && \
+    cd glm && \
+    cmake -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/3DS.cmake" . && \
+    make && \
+    make install
 
 # Setup PicaGL
 RUN git clone https://github.com/masterfeizz/picaGL && \ 
@@ -28,10 +27,11 @@ RUN git clone https://github.com/masterfeizz/imgui-picagl && \
     make; make install 
 
 # Setup SQLite3
-RUN wget https://sqlite.org/2025/sqlite-amalgamation-3510100.zip
-unzip -Cj sqlite-amalgamation-3510100.zip -d sqlite3
-cd sqlite3
-
+RUN git clone https://github.com/daedalusx64/ci_tools && \
+    cd ci_tools/3DS/SQLite3 && \
+    cmake -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/3DS.cmake" -DCTR=ON . && \
+    make && \
+    make install
 
 # Setup Makerom
 
@@ -41,8 +41,3 @@ RUN	apt-get update && \
 	cd Project_CTR && \
 	make && \
 	cp makerom/bin/makerom /usr/local/bin
-
-# Update CMake
-RUN 	apt-get install -y python3-pip && \
-	pip3 install cmake && \
-     	cmake --version

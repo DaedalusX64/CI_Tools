@@ -21,7 +21,6 @@ target_compile_definitions(sqlite3 PRIVATE
     SQLITE_OMIT_LOAD_EXTENSION
     SQLITE_OMIT_DYNAMIC_EXTENSION
     SQLITE_THREADSAFE=0
-
 )
 endif()
 
