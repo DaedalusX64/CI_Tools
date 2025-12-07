@@ -10,6 +10,7 @@ if(CTR)
 add_library(sqlite3 sqlite3.c sqlite3_stubs.c )
 else
 add_library(sqlite3 sqlite3.c)
+endif()
 
 # CTR Toolchain lacks all the below. yay
 if(CTR)
